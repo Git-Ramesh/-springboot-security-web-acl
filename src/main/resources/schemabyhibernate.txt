@@ -1,0 +1,110 @@
+create table acl_class (
+       id bigint not null auto_increment,
+        class varchar(255),
+        primary key (id)
+    ) engine=MyISAM
+Hibernate: 
+    
+    create table acl_entry (
+       id bigint not null auto_increment,
+        ace_order integer,
+        audit_failure bit,
+        audit_success bit,
+        granting bit,
+        mask integer,
+        acl_object_identity bigint,
+        sid bigint,
+        primary key (id)
+    ) engine=MyISAM
+Hibernate: 
+    
+    create table acl_object_identity (
+       id bigint not null auto_increment,
+        entries_inheriting bit,
+        object_id_identity bigint,
+        object_id_class bigint,
+        owner_sid bigint,
+        parent_object bigint,
+        primary key (id)
+    ) engine=MyISAM
+Hibernate: 
+    
+    create table acl_sid (
+       id bigint not null auto_increment,
+        principal bit,
+        sid varchar(255),
+        primary key (id)
+    ) engine=MyISAM
+Hibernate: 
+    
+    create table hibernate_sequence (
+       next_val bigint
+    ) engine=MyISAM
+Hibernate: 
+    
+    insert into hibernate_sequence values ( 1 )
+Hibernate: 
+    
+    create table topic (
+       id integer not null,
+        category varchar(25),
+        title varchar(25),
+        primary key (id)
+    ) engine=MyISAM
+Hibernate: 
+    
+    create table users (
+       username varchar(50) not null,
+        country varchar(30),
+        email varchar(38) not null,
+        enabled integer,
+        password varchar(100) not null,
+        role varchar(38) not null,
+        primary key (username)
+    ) engine=MyISAM
+Hibernate: 
+    
+    alter table acl_class 
+       drop index UK_iy7ua5fso3il3u3ymoc4uf35w
+Hibernate: 
+    
+    alter table acl_class 
+       add constraint UK_iy7ua5fso3il3u3ymoc4uf35w unique (class)
+Hibernate: 
+    
+    alter table users 
+       drop index UK_6dotkott2kjsp8vw4d0m25fb7
+Hibernate: 
+    
+    alter table users 
+       add constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email)
+Hibernate: 
+    
+    alter table acl_entry 
+       add constraint FKl39t1oqikardwghegxe0wdcpt 
+       foreign key (acl_object_identity) 
+       references acl_object_identity (id)
+Hibernate: 
+    
+    alter table acl_entry 
+       add constraint FK9r4mj8ewa904g3wivff0tb5b0 
+       foreign key (sid) 
+       references acl_sid (id)
+Hibernate: 
+    
+    alter table acl_object_identity 
+       add constraint FKc06nv93ck19el45a3g1p0e58w 
+       foreign key (object_id_class) 
+       references acl_class (id)
+Hibernate: 
+    
+    alter table acl_object_identity 
+       add constraint FKikrbtok3aqlrp9wbq6slh9mcw 
+       foreign key (owner_sid) 
+       references acl_sid (id)
+Hibernate: 
+    
+    alter table acl_object_identity 
+       add constraint FK4soxn7uid8qxltqps8kewftx7 
+       foreign key (parent_object) 
+       references acl_object_identity (id)
